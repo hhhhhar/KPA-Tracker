@@ -1,12 +1,5 @@
-# OMAD: Object Model with Articulated Deformations
+## KPA-Tracker: Towards Robust and Real-Time Category-Level Articulated Object 6D Pose TrackingDatasets
 
-This repository is the official implementation of the paper
-[OMAD: Object Model with Articulated Deformations for Pose Estimation and Retrieval](https://sites.google.com/view/omad-bmvc//). This paper has been accepted to BMVC 2021.
-
-![Overview](assets/OMAD.png)
-![Visulization](assets/qualitative%20results.png)
-
-## Datasets
 [ArtImage](https://drive.google.com/file/d/1Gp3muPrSY7BPrePhbO1M4U0DQVd_4OqV/view?usp=sharing) dataset contains the synthetic images generated from Unity along with the following annotations:
 
 - RGB image
@@ -14,10 +7,11 @@ This repository is the official implementation of the paper
 - part mask
 - part pose
 
-This dataset also contains **URDF** articulated object models of five categories from PartNet-Mobility, 
+This dataset also contains **URDF** articulated object models of five categories from PartNet-Mobility,
 which is re-annotated by us to align the rest state in the same category.
 
 ## Usage
+
 ### Installation
 
 Environments:
@@ -46,6 +40,7 @@ python setup.py install
 ```
 
 And, building only the CUDA kernels:
+
 ```bash
 cd model/Pointnet2_PyTorch_master
 pip install pointnet2_ops_lib/.
@@ -80,6 +75,3 @@ python  train_KPA_Tracker.py --num_kp 8  --work_dir  work_dir/omad-net_laptop  -
 ```bash
 python video_funcs/video_func_ArtImage.py  --num_kp 8 --checkpoint model_current_laptop.pth --work_dir work_dir/KPA_tracker_laptop_kp8   --params_dir work_dir/KPA_generator_laptop_kp8  --cate_id 1 --num_basis 10 --num_parts 2 --reg_weight 0 --kp_thr 0.1 --show
 ```
-
-
-
