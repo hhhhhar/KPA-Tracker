@@ -1,5 +1,7 @@
 ## KPA-Tracker: Towards Robust and Real-Time Category-Level Articulated Object 6D Pose TrackingDatasets
+This repository is the official implementation of the paper KPA-Tracker: Towards Robust and Real-Time Category-Level Articulated Object 6D Pose TrackingDatasets. This paper has been accepted to AAAI 2024
 
+## Dataset
 [ArtImage](https://drive.google.com/file/d/1Gp3muPrSY7BPrePhbO1M4U0DQVd_4OqV/view?usp=sharing) dataset contains the synthetic images generated from Unity along with the following annotations:
 
 - RGB image
