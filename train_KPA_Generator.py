@@ -8,15 +8,15 @@ import torch.utils.data
 import tqdm
 import time
 
-from model.OMAD_KPA_Generator import OMAD_KPA_Generator
+from model.KPA_Generator import KPA_Generator
 from libs.loss_omad_priornet import Loss_OMAD_PriorNet
-from dataset.dataset_Generator import SapienDataset_OMADPriorNet
+from dataset.dataset1_Generator import SapienDataset_OMADPriorNet
 
 cate_list = ['laptop', 'eyeglasses', 'dishwasher', 'drawer', 'scissors']
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset_root', type=str, default='./ArtImage', help='dataset root dir')
+    parser.add_argument('--dataset_root', type=str, default='./dataset1', help='dataset root dir')
     parser.add_argument('--resume', type=str, default=None, help='resume model')
     parser.add_argument('--category', type=int, default=1, help='category to train')
     parser.add_argument('--num_samples', type=int, default=50000, help='number of samples of training dataset')
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     opt = parser.parse_args()
 
     device = torch.device("cuda")
-    model = OMAD_KPA_Generator(node_num=opt.num_kp, basis_num=opt.num_basis, part_num=opt.num_parts, device=device,
+    model = KPA_Generator(node_num=opt.num_kp, basis_num=opt.num_basis, part_num=opt.num_parts, device=device,
                          symtype=opt.symtype, init_n_pl=((1., 0.), ))
     model = model.to(device)
 

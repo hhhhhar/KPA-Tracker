@@ -12,9 +12,9 @@ import tqdm
 import time
 
 from torch.utils.tensorboard import SummaryWriter
-from model.OMAD_KPA_Tracker import OMAD_KPA_Tracker
+from model.KPA_Tracker import KPA_Tracker
 from libs.loss_omadnet import Loss_OMAD_Net
-from dataset.dataset_Tracker_conrdinate import SapienDataset_OMADNet
+from dataset.dataset1_Tracker_conrdinate import SapienDataset_OMADNet
 
 cate_list = ['laptop', 'eyeglasses', 'dishwasher', 'drawer', 'scissors']
 
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 
     # print(osp.join(opt.params_dir, 'params.pth'))
     params_dict = torch.load(osp.join(opt.params_dir, 'params.pth'))
-    model = OMAD_KPA_Tracker(device=device, params_dict=params_dict,
+    model = KPA_Tracker(device=device, params_dict=params_dict,
                        num_points=opt.num_points, num_kp=opt.num_kp, num_parts=opt.num_parts,
                        init_dense_soft_factor=opt.dense_soft_factor, num_basis=opt.num_basis, symtype=opt.symtype,
                        use_attention=not opt.no_att)

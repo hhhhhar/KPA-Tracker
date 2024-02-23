@@ -9,8 +9,8 @@ import mmcv
 import torch.utils.data
 from matplotlib import cm
 
-from model.OMAD_KPA_Generator import OMAD_KPA_Generator
-from dataset.dataset_Generator import SapienDataset_OMADPriorNet
+from model.KPA_Generator import KPA_Generator
+from dataset.dataset1_Generator import SapienDataset_OMADPriorNet
 
 cate_list = ['laptop', 'eyeglasses', 'dishwasher', 'drawer', 'scissors']  
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     opt = parser.parse_args()
 
     device = torch.device("cuda") if opt.use_gpu else torch.device("cpu")
-    model = OMAD_KPA_Generator(node_num=opt.num_kp, basis_num=opt.num_basis, part_num=opt.num_parts, device=device,
+    model = KPA_Generator(node_num=opt.num_kp, basis_num=opt.num_basis, part_num=opt.num_parts, device=device,
                         symtype=opt.symtype)
     model = model.to(device)
 
