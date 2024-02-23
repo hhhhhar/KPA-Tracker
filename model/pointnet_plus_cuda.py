@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim.lr_scheduler as lr_sched
 import sys
-sys.path.append("..")  ## 这个
+sys.path.append("/home/huanganran/liuliu/KPA-Tracker/model")  
 import os
 os.chdir(sys.path[0])
 from Pointnet2_PyTorch_master.pointnet2_ops_lib.pointnet2_ops.pointnet2_modules import PointnetFPModule, PointnetSAModule

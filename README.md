@@ -51,7 +51,7 @@ cd model/Pointnet2_PyTorch_master
 pip install pointnet2_ops_lib/.
 ```
 
-Finally, download [the dataset](https://1drv.ms/u/s!As7BgFXGjZFgmRnf80as8a35G2v6?e=SZfD5e) Dataset and put it in `KPA-Tracker/dataset1` folder.
+Finally, download [the dataset1](https://1drv.ms/u/s!As7BgFXGjZFgmRnf80as8a35G2v6?e=SZfD5e)/[the dataset2](https://1drv.ms/u/s!As7BgFXGjZFgmRojXaRSwtosu81I?e=Dja8Ld) Dataset and put it in `KPA-Tracker/dataset1(or2)` folder.
 
 Now you are ready to go!
 
@@ -72,7 +72,7 @@ python test_KPA_Generator.py --num_kp  8 --checkpoint  model_current_laptop.pth 
 ### Training of KPA_Tracker
 
 ```bash
-python  train_KPA_Tracker.py --num_kp 8  --work_dir  work_dir/omad-net_laptop  --params_dir  work_dir/omad_priornet_laptop  --num_basis  10  --symtype shape
+python  train_KPA_Tracker.py --num_kp 8  --work_dir  work_dir/KPA_tracker_laptop_kp8  --params_dir  work_dir/KPA_generator_laptop_kp8  --num_basis  10  --symtype shape
 ```
 
 ### Testing of KPA_Tracker and Visualization

@@ -11,9 +11,10 @@ import xml.etree.ElementTree as ET
 from scipy.spatial.transform import Rotation
 import tqdm
 import sys
-sys.path.append('../')
+sys.path.append('.')
+sys.path.append('..')
 from dataset.dataset1_Tracker_camera import SapienDataset_OMADNet
-from model.KPA_Tracker import OMAD_Net
+from model.KPA_Tracker import KPA_Tracker
 import pycocotools.mask as maskUtils
 from libs.loss_omadnet import Loss_OMAD_Net
 import matplotlib as mpl
@@ -89,20 +90,20 @@ def visual(kp):
 
 def get_vis_resource(index, result, norm_kp, model, opt, device, complete_all_mesh_pts, fathest_sampler): # no_concat
 
-    pred_cls = torch.from_numpy(result['pred_cls']).to(device)
-    pred_base_r = torch.from_numpy(result['pred_base_r']).to(device)
-    pred_base_t = torch.from_numpy(result['pred_base_t']).to(device)
-    pred_joint_state = torch.from_numpy(result['pred_joint_state']).to(device)
-    pred_trans_part_kp = torch.from_numpy(result['pred_trans_part_kp']).to(device)
-    pred_norm_part_kp = torch.from_numpy(result['pred_norm_part_kp']).to(device)
-    gt_norm_joint_loc = torch.from_numpy(result['gt_norm_joint_loc']).to(device)
-    gt_norm_joint_axis = torch.from_numpy(result['gt_norm_joint_axis']).to(device)
-    gt_trans_part_kp = torch.from_numpy(result['gt_trans_part_kp']).to(device)
+    pred_cls = result['pred_cls']
+    pred_base_r = result['pred_base_r']
+    pred_base_t = result['pred_base_t']
+    pred_joint_state = result['pred_joint_state']
+    pred_trans_part_kp = result['pred_trans_part_kp']
+    pred_norm_part_kp = result['pred_norm_part_kp']
+    gt_norm_joint_loc = result['gt_norm_joint_loc']
+    gt_norm_joint_axis = result['gt_norm_joint_axis']
+    gt_trans_part_kp = result['gt_trans_part_kp']
     sort_part = result['sort_part']
-    cate = torch.from_numpy(result['cate']).to(device)
-    urdf_id = torch.from_numpy(result['urdf_id']).to(device)
+    cate = result['cate']
+    urdf_id = result['urdf_id']
 
-    norm_kp = torch.from_numpy(norm_kp).to(device)
+    norm_kp = norm_kp
 
 
     if index == 0:
@@ -110,7 +111,7 @@ def get_vis_resource(index, result, norm_kp, model, opt, device, complete_all_me
         print('URDF id={}'.format(urdf_id))
         # print('{} valid keypoints!'.format(torch.sum(init_part_kp_weight).to(torch.int).item()))
 
-    init_base_t = pred_base_t.unsqueeze(0)
+    init_base_t = pred_base_t
     init_base_r = pred_base_r
 
     # support prismatic joints and kinematic tree depth > 2
@@ -122,9 +123,9 @@ def get_vis_resource(index, result, norm_kp, model, opt, device, complete_all_me
     joint_type = 'revolute' if opt.cate_id != 4 else 'prismatic'
     if index == 0:
         if joint_type == 'revolute':
-            print('init_joint_state={} rad'.format((init_joint_state.cpu().numpy()).tolist()))
+            print('init_joint_state={} rad'.format(init_joint_state.tolist()))
         else:
-            print('init_joint_state={}'.format((init_joint_state.cpu().numpy()).tolist()))
+            print('init_joint_state={}'.format(init_joint_state.tolist()))
 
 
     scipy_optim = Optim(opt.num_parts, gt_norm_joint_loc, gt_norm_joint_axis, opt.cate_id, isDebug=opt.show_omad)
@@ -175,14 +176,14 @@ def get_vis_resource(index, result, norm_kp, model, opt, device, complete_all_me
 
     result_dict = dict()
     result_dict['cloud'] = result['cloud']
-    result_dict['pred_cls'] = np.stack(pred_cls.cpu(), axis=0)
+    result_dict['pred_cls'] = np.stack(pred_cls, axis=0)
     result_dict['pred_r_list'] = np.stack(pred_r_list, axis=0)
     result_dict['pred_t_list'] = np.stack(pred_t_list, axis=0)
     result_dict['pred_rt_list'] = np.stack(pred_rt_list, axis=0)
-    result_dict['pred_trans_part_kp'] = pred_trans_part_kp.cpu().numpy()
+    result_dict['pred_trans_part_kp'] = pred_trans_part_kp
     result_dict['nodes_list'] = np.stack(nodes_list, axis=0)
-    result_dict['pred_trans_joint_params_all'] = [pred_trans_joint_params_all[0].cpu().numpy(), pred_trans_joint_params_all[1].cpu().numpy()]
-    result_dict['new_pred_joint_state'] = new_pred_joint_state.cpu().numpy()
+    result_dict['pred_trans_joint_params_all'] = [pred_trans_joint_params_all[0], pred_trans_joint_params_all[1]]
+    result_dict['new_pred_joint_state'] = new_pred_joint_state
 
     if index == 0:
         print()
@@ -199,7 +200,7 @@ def vis_func(trans_info, cam_fix_rt, pred_cam_rt):
     pred_trans_part_kp = trans_info['pred_trans_part_kp']
     nodes_list = trans_info['nodes_list']
     pred_trans_joint_params_all = trans_info['pred_trans_joint_params_all']
-    num_joints = pred_trans_joint_params_all[0].shape[0]
+    num_joints = len(pred_trans_joint_params_all[0])
     cloud = trans_info['cloud']
 
     base_colors = np.array([(207/255, 37/255, 38/255), (28/255, 108/255, 171/255),
@@ -371,8 +372,8 @@ if __name__ == '__main__':
 
     num_parts = opt.num_parts
     device = torch.device("cuda:0")
-    urdf_dir = f'../ArtImage/{CLASSES[opt.cate_id-1]}/urdf'
-    intrinsics_path = osp.join(f'../ArtImage/camera_intrinsic.json')
+    urdf_dir = f'{opt.data_dir}/{CLASSES[opt.cate_id-1]}/urdf'
+    intrinsics_path = osp.join(f'{opt.data_dir}/camera_intrinsic.json')
     camera_intrinsic = o3d.io.read_pinhole_camera_intrinsic(intrinsics_path)
     cam_cx, cam_cy = camera_intrinsic.get_principal_point()
     cam_fx, cam_fy = camera_intrinsic.get_focal_length()
@@ -392,17 +393,19 @@ if __name__ == '__main__':
 
 
     annotation_list = []
-    annotation_list_path = osp.join(opt.data_dir, f'{CLASSES[opt.cate_id-1]}','train', 'annotations')
-    for file in sorted(os.listdir(annotation_list_path)):
-        if '.json' in file and file in annotation_valid_flags[opt.cate_id-1]:
-            annotation = mmcv.load(osp.join(annotation_list_path, file))
-            annotation_list.append(annotation)
+    annotation_path = osp.join(opt.data_dir, f'{CLASSES[opt.cate_id-1]}','train')
+    for video in sorted(os.listdir(annotation_path)):
+        video_path = osp.join(annotation_path, video, 'annotations')
+        for file in sorted(os.listdir(video_path)):
+            if '.json' in file and file in annotation_valid_flags[opt.cate_id-1]:
+                annotation = mmcv.load(osp.join(video_path, file))
+                annotation_list.append(annotation)
     urdf_id = annotation_list[0]['instances'][0]['urdf_id']
     dir = str(urdf_id)
 
 
     params_dict = torch.load(osp.join(opt.params_dir, 'params.pth'))
-    model = OMAD_Net(device=device, params_dict=params_dict,
+    model = KPA_Tracker(device=device, params_dict=params_dict,
                         num_points=opt.num_points, num_kp=opt.num_kp, num_parts=opt.num_parts,
                         init_dense_soft_factor=opt.dense_soft_factor, num_basis=opt.num_basis, symtype=opt.symtype)
     model = model.to(device)
