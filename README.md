@@ -1,7 +1,6 @@
 # KPA-Tracker: Towards Robust and Real-Time Category-Level Articulated Object 6D Pose Tracking
 
-This repository is the official implementation of the paper
-[OMAD: Object Model with Articulated Deformations for Pose Estimation and Retrieval](https://sites.google.com/view/omad-bmvc//). This paper has been accepted to AAAI 2024.
+This repository is the official implementation of the paper KPA-Tracker: Towards Robust and Real-Time Category-Level Articulated Object 6D Pose Tracking. This paper has been accepted to AAAI 2024.
 
 ![Overview](assets/OMAD.png)
 ![Visulization](assets/qualitative%20results.png)
